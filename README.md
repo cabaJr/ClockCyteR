@@ -102,7 +102,7 @@ Select a period-estimation method (FFT-NLLS recommended for most datasets), set 
 
 If you use ClockCyteR in your research, please cite:
 
-> Ferrari et al. (2026, Advanced Science). *A high-throughput live imaging platform to investigate circuit-dependent regulation of circadian rhythms in brain tissue.* GitHub: https://github.com/cabaJr/clockcyteR
+> Ferrari et al. (2026, Advanced Science). *A high-throughput live imaging platform to investigate circuit-dependent regulation of circadian rhythms in brain tissue.* GitHub: http://doi.org/10.1002/advs.75427 https://github.com/cabaJr/clockcyteR
 
 <br>
 
