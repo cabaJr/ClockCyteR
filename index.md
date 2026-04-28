@@ -17,6 +17,8 @@ The app was developed and tested for experiments in which oscillating
 reporters in SCN slices are imaged continuously for several circadian
 cycles.
 
+![ClockCyteR workflow](reference/figures/screenshot_workflow.png)
+
   
 
 ## Installation
@@ -53,6 +55,8 @@ clockcyteR::run_app()
 
 This opens the ClockCyteR landing page in your browser.
 
+![Input tab](reference/figures/screenshot_input.png)
+
   
 
 ### Workflow
@@ -61,22 +65,27 @@ This opens the ClockCyteR landing page in your browser.
 
 Click **“Start a new experiment”** on the landing page, then select your
 Incucyte `.txt` export file and the vessel position it corresponds to
-(front-left, centre-right, etc.). Multiple files from different vessel
-positions can be loaded in sequence.
+(front-left, centre-right, etc.). Press **“Load into Data frame”** to
+parse the metadata and intensity traces.
 
-Press **“Load into Data frame”** to parse the metadata and intensity
-traces.
+![Analysis tab — timeseries](reference/figures/screenshot_analysis.png)
 
   
 
 **2. Explore and process timeseries**
 
-Switch to the **Analysis** tab to visualise the raw traces. Use the
-time-window slider to zoom in on a region of interest, then optionally:
+Switch to the **Analysis** tab to visualise the raw traces. Pre-process
+the data before plotting by optionally running:
 
-- **Remove outliers** — LOESS-based detection of aberrant data points
+- **Remove outliers** — LOESS-based detection and removal of aberrant
+  data points
 - **Detrend** — linear or cubic polynomial baseline removal
-- **Normalize** — min/max scaling to \[0, 1\]
+
+Then use the time-window slider to select the region of interest and
+press **Plot** to inspect the result.
+
+![Analysis tab — period
+results](reference/figures/screenshot_plotting.png)
 
   
 
@@ -85,8 +94,11 @@ time-window slider to zoom in on a region of interest, then optionally:
 Select a period-estimation method (FFT-NLLS recommended for most
 datasets), set the time window for analysis, and press **“Launch period
 analysis”**. The app computes period length for each sample and displays
-a summary table alongside a jitter/bar plot of period estimates across
+a summary table alongside jitter scatterplots of period estimates across
 groups.
+
+![Analysis tab — period
+results](reference/figures/screenshot_period.png)
 
   
 
@@ -104,8 +116,7 @@ If you use ClockCyteR in your research, please cite:
 
 > Ferrari et al. (2026, Advanced Science). *A high-throughput live
 > imaging platform to investigate circuit-dependent regulation of
-> circadian rhythms in brain tissue.*
-> <http://doi.org/10.1002/advs.75427> GitHub:
+> circadian rhythms in brain tissue.* GitHub:
 > <https://github.com/cabaJr/clockcyteR>
 
   
