@@ -1,0 +1,149 @@
+# ClockCyteR [![ClockCyteR](reference/figures/ClockCyteR_hex.png)](https://github.com/cabaJr/clockcyteR)
+
+  
+
+## Overview
+
+ClockCyteR is a Shiny application for rapid phenotyping of circadian
+rhythm time-series data obtained from the Incucyte live-cell imaging
+platform. Starting from fluorescence intensity traces exported directly
+from the Incucyte software, ClockCyteR estimates key circadian
+parameters — period length, amplitude and relative phase — using
+multiple methods including FFT-NLLS and periodogram-based approaches
+(chi-squared, Lomb-Scargle, autocorrelation, Fourier and CWT). All
+results and plots can be exported for downstream analysis.
+
+The app was developed and tested for experiments in which oscillating
+reporters in SCN slices are imaged continuously for several circadian
+cycles.
+
+  
+
+## Installation
+
+You can install the development version of ClockCyteR from GitHub:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("cabaJr/clockcyteR")
+```
+
+### Non-CRAN dependencies
+
+ClockCyteR relies on the [rethomics](https://rethomics.github.io/) suite
+for circadian analysis. Install these before the package if they are not
+already present:
+
+``` r
+remotes::install_github("rethomics/behavr")
+remotes::install_github("rethomics/ggetho")
+remotes::install_github("rethomics/zeitgebr")
+```
+
+  
+
+## Usage
+
+Launch the app with:
+
+``` r
+library(clockcyteR)
+clockcyteR::run_app()
+```
+
+This opens the ClockCyteR landing page in your browser.
+
+  
+
+### Workflow
+
+**1. Upload data**
+
+Click **“Start a new experiment”** on the landing page, then select your
+Incucyte `.txt` export file and the vessel position it corresponds to
+(front-left, centre-right, etc.). Multiple files from different vessel
+positions can be loaded in sequence.
+
+Press **“Load into Data frame”** to parse the metadata and intensity
+traces.
+
+  
+
+**2. Explore and process timeseries**
+
+Switch to the **Analysis** tab to visualise the raw traces. Use the
+time-window slider to zoom in on a region of interest, then optionally:
+
+- **Remove outliers** — LOESS-based detection of aberrant data points
+- **Detrend** — linear or cubic polynomial baseline removal
+- **Normalize** — min/max scaling to \[0, 1\]
+
+  
+
+**3. Estimate circadian parameters**
+
+Select a period-estimation method (FFT-NLLS recommended for most
+datasets), set the time window for analysis, and press **“Launch period
+analysis”**. The app computes period length for each sample and displays
+a summary table alongside a jitter/bar plot of period estimates across
+groups.
+
+  
+
+**4. Export results**
+
+- Download annotated timeseries plots as a `.zip` archive
+- Download the period / amplitude summary table as `.csv`
+- Download raw cleaned or detrended data as `.csv`
+
+  
+
+## Citation
+
+If you use ClockCyteR in your research, please cite:
+
+> Ferrari et al. (2026, in press). *A high-throughput live imaging
+> platform to investigate circuit-dependent regulation of circadian
+> rhythms in brain tissue.* GitHub:
+> <https://github.com/cabaJr/clockcyteR>
+
+  
+
+## Code of Conduct
+
+Please note that the ClockCyteR project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+# Package index
+
+## All functions
+
+- [`Annotate`](https://cabajr.github.io/ClockCyteR/reference/Annotate.md)
+  : Annotate
+- [`load_data()`](https://cabajr.github.io/ClockCyteR/reference/load_data.md)
+  : load_data
+- [`manual_for_app_dev`](https://cabajr.github.io/ClockCyteR/reference/manual_for_app_dev.md)
+  : NAMING CONVENTION Functions camelCase R6 objects Reverse camelCase
+  with snakes. (confusing enough?) examples are: Custom_tables,
+  App_settings, Annotate, R6_raw_data Modules Module names are written
+  in snake_case, and they are used in: - app_ui.R file in tabItem
+  function after the tabName arg, followed by "\_ui" - in app_server.R
+  file in the server logic when importing the returned values Menu items
+  Menu items names are spelled with PascalCase, and are used in:
+  App_ui.R in the sidebarMenu function App_ui.R in the dashboardBody
+  function app_server.R in render_tabItem(), in the tabname arg in each
+  module when populating the list to be returned. The list itself is
+  named with snake_case as it is referred to the module it its related
+  to
+- [`overwrite_vessel()`](https://cabajr.github.io/ClockCyteR/reference/overwrite_vessel.md)
+  : overwrite_vessel
+- [`run_app()`](https://cabajr.github.io/ClockCyteR/reference/run_app.md)
+  : Run the Shiny Application
+
+# Articles
+
+### All vignettes
+
+- [clockcyteR](https://cabajr.github.io/ClockCyteR/articles/clockcyteR.md):
