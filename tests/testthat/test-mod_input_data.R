@@ -1,0 +1,55 @@
+# Load the App_setting.R R6 class definition
+
+class_file_path <- here::here("R", "fct_App_settings.R")
+base::source(class_file_path)
+
+App_settings_test <- App_settings$new()
+
+testServer(
+  mod_input_data_server,
+  # Add here your module params
+  args = list(env = App_settings_test)
+  , {
+
+    ns <- session$ns
+    expect_true(
+      inherits(ns, "function")
+    )
+    expect_true(
+      grepl(id, ns(""))
+    )
+    expect_true(
+      grepl("test", ns("test"))
+    )
+    expect_true(
+      is_r6_obj(env, "App_settings")
+    )
+# TODO add test for input processing
+    # try to see if data uploaded in the input are present and deny accepting
+    # other data types
+
+
+    # Here are some examples of tests you can
+    # run on your module
+    # - Testing the setting of inputs
+    # session$setInputs(x = 1)
+    # expect_true(input$x == 1)
+    # - If ever your input updates a reactiveValues
+    # - Note that this reactiveValues must be passed
+    # - to the testServer function via args = list()
+    # expect_true(r$x == 1)
+    # - Testing output
+    # expect_true(inherits(output$tbl$html, "html"))
+
+})
+
+test_that("module ui works", {
+  ui <- mod_input_data_ui(id = "test")
+  golem::expect_shinytaglist(ui)
+  # Check that formals have not been removed
+  fmls <- formals(mod_input_data_ui)
+  for (i in c("id")){
+    expect_true(i %in% names(fmls))
+  }
+})
+

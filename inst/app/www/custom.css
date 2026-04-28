@@ -1,0 +1,10 @@
+/* Hide text portion of header logo when sidebar is collapsed to mini mode */
+.sidebar-mini.sidebar-collapse .main-header .logo .logo-lg,
+.sidebar-mini-expand-feature.sidebar-collapse .main-header .logo .logo-lg {
+  display: none;
+}
+
+/* Always show the mini logo when sidebar is collapsed */
+.sidebar-mini.sidebar-collapse .main-header .logo .logo-mini {
+  display: inline-block;
+}
