@@ -19,8 +19,7 @@ ClockCyteR is a Shiny application for rapid phenotyping of circadian rhythm time
 
 The app was developed and tested for experiments in which oscillating reporters in SCN slices are imaged continuously for several circadian cycles.
 
-<!-- SCREENSHOT: add a composite screenshot showing the full workflow here -->
-<!-- Example: <img src="man/figures/screenshot_workflow.png" width="90%" alt="ClockCyteR workflow" /> -->
+<img src="man/figures/screenshot_workflow.png" width="90%" alt="ClockCyteR workflow" />
 
 <br>
 
@@ -56,40 +55,38 @@ clockcyteR::run_app()
 
 This opens the ClockCyteR landing page in your browser.
 
+<img src="man/figures/screenshot_input.png" width="90%" alt="Input tab" />
+
 <br>
 
 ### Workflow
 
 **1. Upload data**
 
-Click **"Start a new experiment"** on the landing page, then select your Incucyte `.txt` export file and the vessel position it corresponds to (front-left, centre-right, etc.). Multiple files from different vessel positions can be loaded in sequence.
+Click **"Start a new experiment"** on the landing page, then select your Incucyte `.txt` export file and the vessel position it corresponds to (front-left, centre-right, etc.). Press **"Load into Data frame"** to parse the metadata and intensity traces.
 
-<!-- SCREENSHOT: Input tab showing a file loaded and the metadata table -->
-<!-- <img src="man/figures/screenshot_input.png" width="90%" alt="Input tab" /> -->
-
-Press **"Load into Data frame"** to parse the metadata and intensity traces.
+<img src="man/figures/screenshot_analysis.png" width="90%" alt="Analysis tab — timeseries" />
 
 <br>
 
 **2. Explore and process timeseries**
 
-Switch to the **Analysis** tab to visualise the raw traces. Use the time-window slider to zoom in on a region of interest, then optionally:
+Switch to the **Analysis** tab to visualise the raw traces. Pre-process the data before plotting by optionally running:
 
-- **Remove outliers** — LOESS-based detection of aberrant data points
+- **Remove outliers** — LOESS-based detection and removal of aberrant data points
 - **Detrend** — linear or cubic polynomial baseline removal
-- **Normalize** — min/max scaling to \[0, 1\]
 
-<!-- SCREENSHOT: Analysis tab with timeseries plotted -->
-<!-- <img src="man/figures/screenshot_analysis.png" width="90%" alt="Analysis tab — timeseries" /> -->
+Then use the time-window slider to select the region of interest and press **Plot** to inspect the result.
+
+<img src="man/figures/screenshot_plotting.png" width="90%" alt="Analysis tab — period results" />
 
 <br>
 
 **3. Estimate circadian parameters**
 
-Select a period-estimation method (FFT-NLLS recommended for most datasets), set the time window for analysis, and press **"Launch period analysis"**. The app computes period length for each sample and displays a summary table alongside a jitter/bar plot of period estimates across groups.
+Select a period-estimation method (FFT-NLLS recommended for most datasets), set the time window for analysis, and press **"Launch period analysis"**. The app computes period length for each sample and displays a summary table alongside jitter scatterplots of period estimates across groups.
 
-<!-- SCREENSHOT: Period results table + barplot -->
-<!-- <img src="man/figures/screenshot_period.png" width="90%" alt="Analysis tab — period results" /> -->
+<img src="man/figures/screenshot_period.png" width="90%" alt="Analysis tab — period results" />
 
 <br>
 
@@ -105,7 +102,7 @@ Select a period-estimation method (FFT-NLLS recommended for most datasets), set 
 
 If you use ClockCyteR in your research, please cite:
 
-> Ferrari et al. (2026, Advanced Science). *A high-throughput live imaging platform to investigate circuit-dependent regulation of circadian rhythms in brain tissue.* http://doi.org/10.1002/advs.75427 GitHub: https://github.com/cabaJr/clockcyteR
+> Ferrari et al. (2026, Advanced Science). *A high-throughput live imaging platform to investigate circuit-dependent regulation of circadian rhythms in brain tissue.* GitHub: https://github.com/cabaJr/clockcyteR
 
 <br>
 
