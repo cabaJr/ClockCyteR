@@ -13,7 +13,6 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Clockcyte analyzer">
 <meta name="description" content="Shiny app to quickly analyze circadian experiment acquired from Incucyte microscope.">
 <meta property="og:description" content="Shiny app to quickly analyze circadian experiment acquired from Incucyte microscope.">
-<meta property="og:image" content="https://cabajr.github.io/ClockCyteR/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -49,11 +48,9 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="clockcyter-">ClockCyteR <a href="https://github.com/cabaJr/clockcyteR" class="external-link"><img src="reference/figures/ClockCyteR_hex.png" align="right" height="138" alt="ClockCyteR"></a>
+<div class="page-header"><h1 id="clockcyter-">ClockCyteR <a href="https://github.com/cabaJr/clockcyteR" class="external-link"><img src="reference/figures/ClockCyteR_hex.png" align="right" height="138" alt="ClockCyteR"></a>
 <a class="anchor" aria-label="anchor" href="#clockcyter-"></a>
-</h1>
-</div>
+</h1></div>
 <!-- badges: start -->
 
 <p><br></p>
@@ -62,8 +59,7 @@
 </h2>
 <p>ClockCyteR is a Shiny application for rapid phenotyping of circadian rhythm time-series data obtained from the Incucyte live-cell imaging platform. Starting from fluorescence intensity traces exported directly from the Incucyte software, ClockCyteR estimates key circadian parameters — period length, amplitude and relative phase — using multiple methods including FFT-NLLS and periodogram-based approaches (chi-squared, Lomb-Scargle, autocorrelation, Fourier and CWT). All results and plots can be exported for downstream analysis.</p>
 <p>The app was developed and tested for experiments in which oscillating reporters in SCN slices are imaged continuously for several circadian cycles.</p>
-<!-- SCREENSHOT: add a composite screenshot showing the full workflow here -->
-<!-- Example: <img src="man/figures/screenshot_workflow.png" width="90%" alt="ClockCyteR workflow" /> -->
+<p><img src="reference/figures/screenshot_workflow.png" width="90%" alt="ClockCyteR workflow"></p>
 <p><br></p>
 </div>
 <div class="section level2">
@@ -92,31 +88,29 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cabaJr/clockcyteR" class="external-link">clockcyteR</a></span><span class="op">)</span></span>
 <span><span class="fu">clockcyteR</span><span class="fu">::</span><span class="fu"><a href="reference/run_app.html">run_app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>This opens the ClockCyteR landing page in your browser.</p>
+<p><img src="reference/figures/screenshot_input.png" width="90%" alt="Input tab"></p>
 <p><br></p>
 <div class="section level3">
 <h3 id="workflow">Workflow<a class="anchor" aria-label="anchor" href="#workflow"></a>
 </h3>
 <p><strong>1. Upload data</strong></p>
-<p>Click <strong>“Start a new experiment”</strong> on the landing page, then select your Incucyte <code>.txt</code> export file and the vessel position it corresponds to (front-left, centre-right, etc.). Multiple files from different vessel positions can be loaded in sequence.</p>
-<!-- SCREENSHOT: Input tab showing a file loaded and the metadata table -->
-<!-- <img src="man/figures/screenshot_input.png" width="90%" alt="Input tab" /> -->
-<p>Press <strong>“Load into Data frame”</strong> to parse the metadata and intensity traces.</p>
+<p>Click <strong>“Start a new experiment”</strong> on the landing page, then select your Incucyte <code>.txt</code> export file and the vessel position it corresponds to (front-left, centre-right, etc.). Press <strong>“Load into Data frame”</strong> to parse the metadata and intensity traces.</p>
+<p><img src="reference/figures/screenshot_analysis.png" width="90%" alt="Analysis tab — timeseries"></p>
 <p><br></p>
 <p><strong>2. Explore and process timeseries</strong></p>
-<p>Switch to the <strong>Analysis</strong> tab to visualise the raw traces. Use the time-window slider to zoom in on a region of interest, then optionally:</p>
+<p>Switch to the <strong>Analysis</strong> tab to visualise the raw traces. Pre-process the data before plotting by optionally running:</p>
 <ul>
 <li>
-<strong>Remove outliers</strong> — LOESS-based detection of aberrant data points</li>
+<strong>Remove outliers</strong> — LOESS-based detection and removal of aberrant data points</li>
 <li>
 <strong>Detrend</strong> — linear or cubic polynomial baseline removal</li>
-<li>
-<strong>Normalize</strong> — min/max scaling to [0, 1]</li>
 </ul>
-<!-- SCREENSHOT: Analysis tab with timeseries plotted --><!-- <img src="man/figures/screenshot_analysis.png" width="90%" alt="Analysis tab — timeseries" /> --><p><br></p>
+<p>Then use the time-window slider to select the region of interest and press <strong>Plot</strong> to inspect the result.</p>
+<p><img src="reference/figures/screenshot_plotting.png" width="90%" alt="Analysis tab — period results"></p>
+<p><br></p>
 <p><strong>3. Estimate circadian parameters</strong></p>
-<p>Select a period-estimation method (FFT-NLLS recommended for most datasets), set the time window for analysis, and press <strong>“Launch period analysis”</strong>. The app computes period length for each sample and displays a summary table alongside a jitter/bar plot of period estimates across groups.</p>
-<!-- SCREENSHOT: Period results table + barplot -->
-<!-- <img src="man/figures/screenshot_period.png" width="90%" alt="Analysis tab — period results" /> -->
+<p>Select a period-estimation method (FFT-NLLS recommended for most datasets), set the time window for analysis, and press <strong>“Launch period analysis”</strong>. The app computes period length for each sample and displays a summary table alongside jitter scatterplots of period estimates across groups.</p>
+<p><img src="reference/figures/screenshot_period.png" width="90%" alt="Analysis tab — period results"></p>
 <p><br></p>
 <p><strong>4. Export results</strong></p>
 <ul>
