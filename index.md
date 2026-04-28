@@ -102,9 +102,10 @@ groups.
 
 If you use ClockCyteR in your research, please cite:
 
-> Ferrari et al. (2026, in press). *A high-throughput live imaging
-> platform to investigate circuit-dependent regulation of circadian
-> rhythms in brain tissue.* GitHub:
+> Ferrari et al. (2026, Advanced Science). *A high-throughput live
+> imaging platform to investigate circuit-dependent regulation of
+> circadian rhythms in brain tissue.*
+> <http://doi.org/10.1002/advs.75427> GitHub:
 > <https://github.com/cabaJr/clockcyteR>
 
   
