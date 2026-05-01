@@ -288,7 +288,7 @@ Clean_sample_data <-
                   detrend = function(grade){
                     outliers_rm = FALSE
                     # runs a check if the dataset with removed outliers is available
-                    if(!is.null(self$intensity_clean)){
+                    if(length(self$intensity_clean) > 0){
                       outliers_rm = TRUE
                       # import data from cleaned values
                       intensity <- self$intensity_clean

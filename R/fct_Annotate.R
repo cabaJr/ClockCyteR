@@ -184,7 +184,7 @@ Annotate <-
 
         plt_title <- stringr::str_c(data$sampleName)#, data$img_number, sep = ", Image ")
         plt_sub <- data$vesselName
-        yaxis <- stringr::str_wrap(data$metric, width = 26)
+        yaxis <- stringr::str_wrap(data$metric, width = 40)
         # get data
         df <- data.frame(timevar = timevar, ch1 = ch1)
         group_label <- if (!is.null(data$sampleGroup) && nzchar(data$sampleGroup) && data$sampleGroup != "Exp") {
@@ -245,7 +245,7 @@ Annotate <-
           plot.title = ggplot2::element_text(hjust = 0.5, size = 14),
           plot.subtitle = ggplot2::element_text(hjust = 0.5, size = 12),
           axis.text = ggplot2::element_text(size = 11),
-          axis.title.y = ggplot2::element_text(size = 13, margin = ggplot2::margin(r = 12)),
+          axis.title.y = ggplot2::element_text(size = 13, margin = ggplot2::margin(r = 30)),
           axis.title.x = ggplot2::element_text(size = 13),
           panel.grid.major.x = ggplot2::element_line(color = "black",
                                             linewidth = 0.5,

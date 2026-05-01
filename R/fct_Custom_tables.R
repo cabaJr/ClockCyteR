@@ -443,15 +443,36 @@ Custom_tables <- R6::R6Class("Custom_tables",
                               #' @return a table of resultys containing Period length, phase, amplitude, offset and error
 
                                 fft_nlls_period = function(data) {
-                                  # Perform FFT
-                                  n <- length(data$value)
-                                  dt <- mean(diff(data$t))
-                                  fft_result <- stats::fft(data$value)
+                                  # Drop NAs before FFT — NAs propagate through fft() and make
+                                  # which.max() return integer(0), causing nls.lm length mismatch.
+                                  valid_idx <- !is.na(data$value)
+                                  fft_vals  <- data$value[valid_idx]
+                                  fft_t     <- data$t[valid_idx]
+                                  n_valid   <- length(fft_vals)
+
+                                  if (n_valid < 10) {
+                                    return(list(period = NA_real_, amplitude = NA_real_,
+                                                phase_rad = NA_real_, phase_circ = NA_real_,
+                                                phase_abs = NA_real_, offset = NA_real_,
+                                                error = NA_real_, GOF = NA_real_, RAE = NA_real_))
+                                  }
+
+                                  # Perform FFT on complete cases
+                                  n          <- n_valid
+                                  dt         <- mean(diff(fft_t))
+                                  fft_result <- stats::fft(fft_vals)
                                   frequencies <- seq(0, 1/dt, length.out = n)
 
                                   # Identify the dominant frequency (excluding the zero frequency)
-                                  dominant_frequency <- frequencies[which.max(base::Mod(fft_result)[2:(n/2)]) + 1]
-                                  initial_period <- 1 / dominant_frequency
+                                  dominant_idx <- which.max(base::Mod(fft_result)[2:floor(n/2)])
+                                  if (length(dominant_idx) == 0) {
+                                    initial_period <- 24  # fallback to circadian period
+                                  } else {
+                                    dominant_frequency <- frequencies[dominant_idx + 1]
+                                    initial_period <- if (is.finite(dominant_frequency) && dominant_frequency > 0) {
+                                      1 / dominant_frequency
+                                    } else 24
+                                  }
 
                                   # Define the sinusoidal model function
                                   sinusoidal_model = function(params, t) {
@@ -467,18 +488,18 @@ Custom_tables <- R6::R6Class("Custom_tables",
                                     return(y - sinusoidal_model(params, t))
                                   }
 
-                                  # Initial parameter estimates
-                                  initial_amplitude <- (max(data$value) - min(data$value)) / 2
+                                  # Initial parameter estimates (using NA-free vectors)
+                                  initial_amplitude <- (max(fft_vals) - min(fft_vals)) / 2
                                   initial_phase <- 0
-                                  initial_offset <- mean(data$value)
+                                  initial_offset <- mean(fft_vals)
                                   initial_params <- c(initial_amplitude, initial_period, initial_phase, initial_offset)
 
-                                  # Perform nonlinear least squares fitting
+                                  # Perform nonlinear least squares fitting on complete cases
                                   fit <- minpack.lm::nls.lm(
                                     par = initial_params,
                                     fn = residuals,
-                                    t = data$t,
-                                    y = data$value,
+                                    t = fft_t,
+                                    y = fft_vals,
                                     lower = c(-Inf, 12, -Inf, -Inf),
                                     upper = c(Inf, 32, Inf, Inf)
                                     )
@@ -512,17 +533,17 @@ Custom_tables <- R6::R6Class("Custom_tables",
                                   phase_circadian <- circular::conversion.circular(fitted_phase, units = "hours")
                                   phase_absolute <- phase_circadian*(fitted_period/24)
 
-                                  # Compute residual error
-                                  fitted_values <- sinusoidal_model(fitted_params, data$t)
-                                  residual_error <- sqrt(mean((data$value - fitted_values)^2))
+                                  # Compute residual error (using NA-free vectors)
+                                  fitted_values <- sinusoidal_model(fitted_params, fft_t)
+                                  residual_error <- sqrt(mean((fft_vals - fitted_values)^2))
 
                                   # Calculate R-squared (GOF)
-                                  ss_total <- sum((data$value - mean(data$value))^2)
-                                  ss_res <- sum((data$value - fitted_values)^2)
+                                  ss_total <- sum((fft_vals - mean(fft_vals))^2)
+                                  ss_res <- sum((fft_vals - fitted_values)^2)
                                   r_squared <- 1 - (ss_res / ss_total)
 
                                   # Compute standard deviation of residuals
-                                  residual_std <- sqrt(sum((data$value - fitted_values)^2) / (length(data$value) - length(fitted_params)))
+                                  residual_std <- sqrt(sum((fft_vals - fitted_values)^2) / (length(fft_vals) - length(fitted_params)))
 
                                   # Compute RAE
                                   RAE <- residual_std / fitted_amplitude
