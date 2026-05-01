@@ -49,44 +49,61 @@ mod_analysis_ui <- function(id){
              #
              # ),
              shinydashboard::box(title = "Timeseries", id = "box3_0", width = 12, solidHeader = TRUE, collapsible = TRUE, status = "primary",
-                                 fluidRow(column(width = 8),
-                                          column(width = 4,
-                                                 actionButton(ns('help3_0'), label = 'Help',
-                                                              style = "color: #fff; background-color: #1e690c; border-color: #1e530c;")
-                                          )
+                                 # Section 1: pre-processing
+                                 fluidRow(style = "margin-top: 4px; margin-bottom: 4px;",
+                                   column(width = 8,
+                                          h5("1. Pre-processing", style = "font-weight: bold; margin: 0;")
+                                   ),
+                                   column(width = 4, style = "text-align: right;",
+                                          actionButton(ns('help3_0'), label = 'Help',
+                                                       style = "color: #fff; background-color: #1e690c; border-color: #1e530c;")
+                                   )
+                                 ),
+                                 fluidRow(
+                                   column(width = 4,
+                                          actionButton(ns("remove_out"), "Remove outliers",
+                                                       style = "width: 100%;")
+                                   ),
+                                   column(width = 4,
+                                          actionButton(inputId = ns("TsDetrend"), label = "Detrend",
+                                                       style = "width: 100%; margin-bottom: 6px;"),
+                                          shinyWidgets::pickerInput(inputId = ns("detr_opt"),
+                                                                    label = NULL,
+                                                                    choices = c("linear", "cubic"),
+                                                                    selected = "cubic", multiple = FALSE)
+                                   ),
+                                   column(width = 4,
+                                          shinyjs::disabled(actionButton(inputId = ns("TsNormalize"), label = "Normalize",
+                                                                         style = "width: 100%;"))
+                                   )
+                                 ),
+                                 shiny::hr(),
+                                 # Section 2: visualise
+                                 fluidRow(style = "margin-bottom: 4px;",
+                                   column(width = 12,
+                                          h5("2. Plot", style = "font-weight: bold; margin: 0;")
+                                   )
                                  ),
                                  fluidRow(
                                    column(width = 6,
                                           shiny::sliderInput(inputId = ns("xlimits_tsplot"),
-                                                             label = "Select time window to visualize",
+                                                             label = "Time window",
                                                              min = 0, max = 200, step = 0.5, value = c(0, 200),
                                                              dragRange = TRUE)
                                    ),
                                    column(width = 3,
-                                          shinyWidgets::pickerInput(inputId = ns("plot_this"), label = "Select data to plot",
-                                                                    choices = c("original", "detrended", "cleaned"),
+                                          shinyWidgets::pickerInput(inputId = ns("plot_this"),
+                                                                    label = "Dataset",
+                                                                    choices = "original",
                                                                     selected = "original", multiple = FALSE)
                                    ),
-                                   column(width = 3,
-                                          actionButton(inputId = ns("TsPlot"), label = "Plot")
+                                   column(width = 3, style = "margin-top: 25px;",
+                                          actionButton(inputId = ns("TsPlot"), label = "Plot",
+                                                       style = "width: 100%;")
                                    )
-                                 ),
-                                 shiny::hr(),
-                                 fluidRow(
-                                   column(width = 4, actionButton(inputId = ns("TsDetrend"), label = "Detrend")),
-                                   column(width = 4, actionButton(ns("remove_out"), "Remove outliers")),
-                                   column(width = 4, shinyjs::disabled(actionButton(inputId = ns("TsNormalize"), label = "Normalize")))
-                                 ),
-                                 fluidRow(
-                                   column(width = 4,
-                                          shinyWidgets::pickerInput(inputId = ns("detr_opt"), label = "Select detrending method",
-                                                                    choices = c("linear", "cubic"), selected = "linear", multiple = FALSE)
-                                   ),
-                                   column(width = 4),
-                                   column(width = 4)
                                  )
              ),
-             shinydashboard::box(title= "Plots", id = "box3_1", width = 12, solidHeader = TRUE, collapsible = TRUE, status = "primary",
+             shinydashboard::box(title= "Plots", id = "box3_1", width = 12, solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE, status = "primary",
                                  shinyjs::hidden(div(id = ns("ts_plot_output"),
                                    fluidRow(
                                      column(width = 6,
@@ -107,22 +124,24 @@ mod_analysis_ui <- function(id){
                                      ),
                                      column(width = 3, offset = 1,
                                        downloadButton(outputId = ns("Dl_plots"),
-                                                      label = tagList(" Timeseries plots"))
+                                                      label = tagList(" Timeseries plots"),
+                                                      style = "color: #fff; background-color: #2171b5; border-color: #125588;")
                                      )
                                    ),
                                    fluidRow(column(width = 12,
-                                     plotly::plotlyOutput(ns("TSplot_out"))
+                                     plotly::plotlyOutput(ns("TSplot_out"), height = "400px")
                                    ))
                                  ))
                                  ),
              shinydashboard::box(title= "Period Analysis", id = "box3_2", width = 12, solidHeader = TRUE, collapsible = TRUE, status = "primary",
                                  fluidRow(column(width = 12,
                                                  shinyWidgets::pickerInput(inputId = ns("period_data"), label = "Select data to use for period analysis",
-                                                                           choices = c("original", "detrended", "cleaned"),
+                                                                           choices = "original",
                                                                            selected = "original", multiple = FALSE),
                                                  actionButton(ns("period_an"), "launch period analysis"),
                                                  shinyjs::disabled(downloadButton(outputId = ns("Dl_period"),
-                                                                                   label = tagList(" Period table (.csv)")))
+                                                                                   label = tagList(" Period table (.csv)"),
+                                                                                   style = "color: #fff; background-color: #2171b5; border-color: #125588;"))
                                                  )
                                           ),
                                  fluidRow(column(width = 12,
@@ -165,7 +184,8 @@ mod_analysis_ui <- function(id){
                                    ),
                                    fluidRow(column(width = 12,
                                                    downloadButton(ns("Dl_scatter"),
-                                                                  label = tagList(" Analysis plots (.zip)"))
+                                                                  label = tagList(" Analysis plots (.zip)"),
+                                                                  style = "color: #fff; background-color: #2171b5; border-color: #125588;")
                                    )),
                                    shinyjs::hidden(div(id = ns("excl_controls"),
                                      style = "margin-top: 12px; padding: 0 15px;",
@@ -185,7 +205,8 @@ mod_analysis_ui <- function(id){
                                            DT::DTOutput(ns("summary_table"))),
                                        shiny::br(),
                                        downloadButton(ns("Dl_summary"),
-                                                      label = tagList(" Summary table (.csv)"))
+                                                      label = tagList(" Summary table (.csv)"),
+                                                      style = "color: #fff; background-color: #2171b5; border-color: #125588;")
                                      ))
                                    ))
                )
@@ -219,6 +240,7 @@ mod_analysis_server <- function(id, env){
     rv <- reactiveValues(currentPlotIndex = 1,
                          t_min = 0,
                          t_max = 1000,
+                         plot_initialized = FALSE,
                          fft_data = NULL,
                          selected_id = NULL,
                          excluded_ids = character(0),
@@ -277,21 +299,61 @@ mod_analysis_server <- function(id, env){
 
     # BOX 3.0
 
+    observeEvent(input$help3_0, {
+      shiny::showModal(shiny::modalDialog(
+        title = "Timeseries analysis",
+        easyClose = TRUE,
+        footer = shiny::modalButton("Close"),
+        shiny::tags$div(
+          shiny::tags$h4("1. Pre-processing"),
+          shiny::tags$p("These steps are optional but recommended before running period analysis.
+                         Run them in order, then use", shiny::tags$b("Plot"), "to inspect the result."),
+          shiny::tags$b("Remove outliers"),
+          shiny::tags$p("Detects and removes extreme values (e.g. debris, focus artefacts) using a rolling-window loess filter.
+                         Flagged timepoints are replaced with", shiny::tags$code("NA"), "and interpolated when plotting or analysing.
+                         Run this step first, before detrending."),
+          shiny::tags$b("Detrend"),
+          shiny::tags$p("Removes long-term baseline drift by fitting and subtracting a polynomial trend.
+                         If outlier removal has already been run, detrending uses the cleaned data automatically."),
+          shiny::tags$ul(
+            shiny::tags$li(shiny::tags$b("Linear"), " -- fits a straight-line trend (grade 1); suitable for mild drift."),
+            shiny::tags$li(shiny::tags$b("Cubic"), " -- fits a cubic polynomial (grade 3); better for curved baselines.")
+          ),
+          shiny::tags$h4("2. Plot"),
+          shiny::tags$p("Use the", shiny::tags$b("time window slider"), "to restrict the portion of the recording to display,
+                         select the dataset to inspect from the dropdown, and press", shiny::tags$b("Plot"), "."),
+          shiny::tags$p("Navigation arrows step through individual samples; the last panel shows all samples in a single faceted overview."),
+          shiny::tags$h5("Available datasets"),
+          shiny::tags$ul(
+            shiny::tags$li(shiny::tags$b("original"), " -- raw values as exported from Incucyte."),
+            shiny::tags$li(shiny::tags$b("cleaned"), " -- available after Remove Outliers."),
+            shiny::tags$li(shiny::tags$b("detrended"), " -- available after Detrend.")
+          )
+        )
+      ))
+    })
+
     # actions to perform after pressing the TsPlot button
     observeEvent(input$TsPlot, {
       shinyjs::show("ts_plot_output")
+      shinyjs::runjs("$('#box3_1').closest('.box').removeClass('collapsed-box').find('.box-body').show();")
       shiny::showNotification("Timeseries plotted", type = "message", duration = 3)
       # update time range from actual data first, then use those values for plotting
       # (avoids reading stale input$xlimits_tsplot before the slider re-renders)
       rv$t_min <- round(min(env$env2$myCleanSample[[1]]$elapsed), 1)
       rv$t_max <- round(max(env$env2$myCleanSample[[1]]$elapsed), 1)
 
-      # update the slider inputs with real data range
-      updateSliderInput(session, "xlimits_tsplot", min = rv$t_min, max = rv$t_max, value = c(rv$t_min, rv$t_max))
-      updateSliderInput(session, "period_timefr",  min = rv$t_min, max = rv$t_max, value = c(rv$t_min, rv$t_max))
-
-      # use rv values as xlimits -- slider may not have re-rendered yet
-      xlimits <- c(rv$t_min, rv$t_max)
+      if (!rv$plot_initialized) {
+        # First press: update slider to real data range; input$xlimits_tsplot hasn't
+        # re-rendered yet so use the data range directly for this render.
+        updateSliderInput(session, "xlimits_tsplot", min = rv$t_min, max = rv$t_max, value = c(rv$t_min, rv$t_max))
+        updateSliderInput(session, "period_timefr",  min = rv$t_min, max = rv$t_max, value = c(rv$t_min, rv$t_max))
+        xlimits <- c(rv$t_min, rv$t_max)
+        rv$plot_initialized <- TRUE
+      } else {
+        # Subsequent presses: slider is already initialised, use user selection.
+        xlimits <- input$xlimits_tsplot
+      }
 
       datasets <- input$datasets
       Annotate <- env$env2$Annotate
@@ -458,7 +520,7 @@ mod_analysis_server <- function(id, env){
               )
             }
           }
-          plt <- plotly::ggplotly(p, height = 320)
+          plt <- plotly::ggplotly(p, height = 390)
           # inject hover text stored in the layer data frame (not in ggplot aes)
           layer_data <- p$layers[[1]]$data
           if (!is.null(layer_data) && "hover_text" %in% names(layer_data)) {
@@ -835,20 +897,25 @@ mod_analysis_server <- function(id, env){
       rv$selected_id  <- NULL   # clear any selection when new analysis runs
       rv$excluded_ids <- character(0)  # reset exclusions for fresh analysis
 
-      # Auto-range period_timefr to actual data if the user hasn't plotted first
+      # Auto-range period_timefr to actual data if the user hasn't plotted first.
+      # updateSliderInput is async -- input$period_timefr won't reflect the new
+      # value within the same observer, so capture t_lim from the corrected range
+      # directly rather than re-reading the stale input after the update.
       t_min_data <- round(min(env$env2$myCleanSample[[1]]$elapsed), 1)
       t_max_data <- round(max(env$env2$myCleanSample[[1]]$elapsed), 1)
       if (input$period_timefr[2] > t_max_data || input$period_timefr[1] < t_min_data) {
         updateSliderInput(session, "period_timefr",
                           min = t_min_data, max = t_max_data,
                           value = c(t_min_data, t_max_data))
+        t_lim <- c(t_min_data, t_max_data)
+      } else {
+        t_lim <- input$period_timefr
       }
 
       Custom_tables <- env$env2$Custom_tables
       Annotate      <- env$env2$Annotate
       source        <- input$period_data
       method        <- input$period_fun
-      t_lim         <- input$period_timefr
 
       period_tbl <- shiny::withProgress(message = "Running period analysis...", value = 0, {
         shiny::incProgress(0.2, detail = "Preparing data")
