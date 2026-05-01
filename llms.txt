@@ -26,6 +26,7 @@ cycles.
 You can install the development version of ClockCyteR from GitHub:
 
 ``` r
+
 # install.packages("remotes")
 remotes::install_github("cabaJr/clockcyteR")
 ```
@@ -37,6 +38,7 @@ for circadian analysis. Install these before the package if they are not
 already present:
 
 ``` r
+
 remotes::install_github("rethomics/behavr")
 remotes::install_github("rethomics/ggetho")
 remotes::install_github("rethomics/zeitgebr")
@@ -49,6 +51,7 @@ remotes::install_github("rethomics/zeitgebr")
 Launch the app with:
 
 ``` r
+
 library(clockcyteR)
 clockcyteR::run_app()
 ```
